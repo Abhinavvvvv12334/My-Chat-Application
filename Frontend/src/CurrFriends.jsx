@@ -12,7 +12,7 @@ export default function CurrFriends() {
   useEffect(() => {
     async function getUser() {
       try {
-        const resp = await axios.get("http://localhost:8080/users/me", {
+        const resp = await axios.get("http://40.192.26.88:5000/users/me", {
           headers: { Authorization: token },
         });
         setCurrUser(resp.data.username);
@@ -31,7 +31,7 @@ export default function CurrFriends() {
       setLoading(true);
       try {
         const resp = await axios.get(
-          "http://localhost:8080/users/friends/display",
+          "http://40.192.26.88:5000/users/friends/display",
           {
             headers: { Authorization: token },
           }

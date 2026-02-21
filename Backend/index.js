@@ -17,7 +17,7 @@ const app=express();
 const server=http.createServer(app);
 const io=new Server(server,{cors:{origin:"*"}});
 const port=process.env.PORT;
-server.listen(port,()=>console.log("Listening"));
+server.listen(port,"0.0.0.0",()=>console.log("Listening"));
 app.use(cors());
 app.use(express.json()); 
 connection.connect(err=>{
@@ -57,9 +57,9 @@ app.post("/users/login",(req,res)=>{
             res.json({status:""});
         }
         else if(result.length===0){
-            res.json({status:"Username Not Exists"});
+            res.json({field:"username",status:"Username Not Exists"});
         }else if(result[0].password!==password){
-            res.json({status:"Password Incorrect"});
+            res.json({field:"password",status:"Password Incorrect"});
         }else{
             const user=result[0];
             const token=jwt.sign({
@@ -183,7 +183,7 @@ app.get("/users/get/messages/:opp",(req,res)=>{
         [curruser,opp,opp,curruser],
         (err,result)=>{
             if(err){
-                res.json({status:"Error"});
+                res.json([]);
                 return;
             }
             res.json(result);

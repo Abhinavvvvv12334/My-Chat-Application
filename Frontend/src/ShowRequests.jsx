@@ -10,7 +10,7 @@ export default function ShowRequests() {
   useEffect(() => {
     async function getUser() {
       try {
-        const resp1 = await axios.get("http://localhost:8080/users/me", {
+        const resp1 = await axios.get("http://40.192.26.88:5000/users/me", {
           headers: { Authorization: token },
         });
         setCurrUser(resp1.data.username);
@@ -29,7 +29,7 @@ export default function ShowRequests() {
       setLoading(true);
       try {
         const resp = await axios.post(
-          "http://localhost:8080/users/requests/pending/user1",
+          "http://40.192.26.88:5000/users/requests/pending/user1",
           { user: currUser },
           { headers: { Authorization: token } }
         );

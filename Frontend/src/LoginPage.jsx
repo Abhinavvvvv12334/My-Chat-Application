@@ -7,33 +7,28 @@ export default function LoginPage() {
     username: "",
     password: "",
   });
-  const [err, setErr] = useState("");
+  const [errors, setErrors] = useState({username:"",password:""});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(e) {    e.preventDefault();
     setIsSubmitting(true);
-    setErr("");
+    setErrors({username:"",password:""});
 
     try {
-      const resp = await axios.post("http://localhost:8080/users/login", {
+      const resp = await axios.post("http://40.192.26.88:5000/users/login", {
         username: details.username,
         password: details.password,
       });
       
-      if (resp.data.token) {
+      if (resp.data.status==="Success") {
         sessionStorage.setItem("token", resp.data.token);
         navigate("/CurrFriends");
       } else {
-        setErr("Invalid username or password");
+        setErrors(prev=>({...prev,[resp.data.field]:resp.data.status}));
       }
     } catch (error) {
-      if (error.response?.status === 401) {
-        setErr("Invalid username or password");
-      } else {
-        setErr("Something went wrong. Please try again.");
-      }
+      console.log("Error");
     } finally {
       setIsSubmitting(false);
     }
@@ -41,7 +36,7 @@ export default function LoginPage() {
 
   function handleChange(e) {
     setDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    setErr("");
+    setErrors(prev=>({...prev,[e.target.name]:""}));
   }
 
   return (
@@ -59,9 +54,12 @@ export default function LoginPage() {
           onChange={handleChange}
           placeholder="Enter your username"
           autoComplete="username"
-          className={err ? "error" : ""}
+          className={errors.username ? "error" : ""}
           required
         />
+	{errors.username && (
+  <div className="field-error">{errors.username}</div>
+)}
 
         <label htmlFor="password">Password</label>
         <input
@@ -72,13 +70,13 @@ export default function LoginPage() {
           onChange={handleChange}
           placeholder="••••••••"
           autoComplete="current-password"
-          className={err ? "error" : ""}
+          className={errors.password ? "error" : ""}
           required
         />
 
-        {err && (
+        {errors.password && (
           <div className="field-error" role="alert">
-            {err}
+            {errors.password}
           </div>
         )}
 

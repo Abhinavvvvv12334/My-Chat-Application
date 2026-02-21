@@ -13,31 +13,64 @@ export default function DisplayMessages() {
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    if (!token) return;
+  if (!token) return;
 
-    async function init() {
-      socket.current = io("http://localhost:8080", { auth: { token } });
-      socket.current.on("private-message", (msgObj) =>
-        setMsgs((prev) => [...prev, msgObj])
-      );
-      const resp = await axios.get("http://localhost:8080/users/me", {
-        headers: { Authorization: token },
+  async function init() {
+    try {
+      console.log("Initializing chat...");
+
+      socket.current = io("http://40.192.26.88:5000", {
+        auth: { token }
       });
-      setUsername(resp.data.username);
-      const resp1 = await axios.get(
-        `http://localhost:8080/users/get/messages/${friend}`,
-        {
-          headers: { Authorization: token },
-        }
+
+      socket.current.on("connect_error", (err) => {
+        console.error("Socket connection error:", err);
+      });
+
+      socket.current.on("private-message", (msgObj) => {
+        console.log("Socket message received:", msgObj);
+        setMsgs((prev) => [...prev, msgObj]);
+      });
+
+      const resp = await axios.get(
+        "http://40.192.26.88:5000/users/me",
+        { headers: { Authorization: token } }
       );
+
+      console.log("Username response:", resp.data);
+      setUsername(resp.data.username);
+
+      const resp1 = await axios.get(
+        `http://40.192.26.88:5000/users/get/messages/${friend}`,
+        { headers: { Authorization: token } }
+      );
+
+      console.log("Fetched messages:", resp1.data);
       setMsgs(resp1.data);
+
+    } catch (error) {
+      console.error("Error inside chat initialization:");
+
+      if (error.response) {
+        console.error("Response error:", error.response.status);
+        console.error("Response data:", error.response.data);
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+      } else {
+        console.error("General error:", error.message);
+      }
     }
-    init();
-    return () => {
-      socket.current?.off("private-message");
-      socket.current?.disconnect();
-    };
-  }, [token, friend]);
+  }
+
+  init();
+
+  return () => {
+    console.log("Cleaning up socket...");
+    socket.current?.off("private-message");
+    socket.current?.disconnect();
+  };
+
+}, [token, friend]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
