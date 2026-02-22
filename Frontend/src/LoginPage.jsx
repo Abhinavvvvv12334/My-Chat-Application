@@ -16,7 +16,7 @@ export default function LoginPage() {
     setErrors({username:"",password:""});
 
     try {
-      const resp = await axios.post("http://40.192.26.88:5000/users/login", {
+      const resp = await axios.post("/users/login", {
         username: details.username,
         password: details.password,
       });

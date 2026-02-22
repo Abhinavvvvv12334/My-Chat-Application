@@ -27,7 +27,7 @@ export default function SignupPage() {
     }
     
     try {
-      const resp = await axios.post("http://40.192.26.88:5000/users/signup", {
+      const resp = await axios.post("/users/signup", {
         username: details.username,
         password: details.password,
       });

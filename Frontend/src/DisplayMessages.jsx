@@ -19,7 +19,7 @@ export default function DisplayMessages() {
     try {
       console.log("Initializing chat...");
 
-      socket.current = io("http://40.192.26.88:5000", {
+      socket.current = io("/", {
         auth: { token }
       });
 
@@ -33,7 +33,7 @@ export default function DisplayMessages() {
       });
 
       const resp = await axios.get(
-        "http://40.192.26.88:5000/users/me",
+        "/users/me",
         { headers: { Authorization: token } }
       );
 
@@ -41,7 +41,7 @@ export default function DisplayMessages() {
       setUsername(resp.data.username);
 
       const resp1 = await axios.get(
-        `http://40.192.26.88:5000/users/get/messages/${friend}`,
+        `/users/get/messages/${friend}`,
         { headers: { Authorization: token } }
       );
 

@@ -10,7 +10,7 @@ export default function TopNavigation() {
   useEffect(() => {
     async function getUser() {
       try {
-        const resp = await axios.get("http://40.192.26.88:5000/users/me", {
+        const resp = await axios.get("/users/me", {
           headers: { Authorization: token },
         });
         setCurrUser(resp.data.username);

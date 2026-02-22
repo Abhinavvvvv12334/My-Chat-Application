@@ -15,7 +15,7 @@ export default function DisplayFriends() {
   useEffect(() => {
     async function getUser() {
       try {
-        const resp1 = await axios.get("http://40.192.26.88:5000/users/me", {
+        const resp1 = await axios.get("/users/me", {
           headers: { Authorization: token },
         });
         setCurrUser(resp1.data.username);
@@ -41,7 +41,7 @@ export default function DisplayFriends() {
 
     try {
       const resp = await axios.get(
-        `http://40.192.26.88:5000/users/${encodeURIComponent(user.trim())}`,
+        `/users/${encodeURIComponent(user.trim())}`,
         {
           headers: { Authorization: token },
         }
@@ -79,7 +79,7 @@ export default function DisplayFriends() {
 
     try {
       const resp = await axios.post(
-        "http://40.192.26.88:5000/users/request/",
+        "/users/request/",
         {
           sender: currUser,
           receiver: searchedUser,

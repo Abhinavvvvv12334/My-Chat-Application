@@ -11,7 +11,7 @@ export default function ViewRequests() {
   useEffect(() => {
     async function getUser() {
       try {
-        const resp1 = await axios.get("http://40.192.26.88:5000/users/me", {
+        const resp1 = await axios.get("/users/me", {
           headers: { Authorization: token },
         });
         setCurrUser(resp1.data.username);
@@ -30,7 +30,7 @@ export default function ViewRequests() {
       setLoading(true);
       try {
         const resp = await axios.post(
-          "http://40.192.26.88:5000/users/requests/pending/user2",
+          "/users/requests/pending/user2",
           { user: currUser },
           { headers: { Authorization: token } }
         );
@@ -49,7 +49,7 @@ export default function ViewRequests() {
     setProcessing((prev) => new Set(prev).add(sender));
     try {
       await axios.post(
-        "http://40.192.26.88:5000/users/requests/accept",
+        "/users/requests/accept",
         {
           sender,
           acceptor: currUser,
@@ -75,7 +75,7 @@ export default function ViewRequests() {
     setProcessing((prev) => new Set(prev).add(sender));
     try {
       await axios.post(
-        "http://40.192.26.88:5000/users/requests/reject",
+        "/users/requests/reject",
         {
           sender,
           rejector: currUser,
